@@ -2,6 +2,12 @@ import tkinter as tk
 import sys
 
 def vent_mostrar(titulo, frases):
+    """
+    Crea una secuencia de ventanas emergentes centradas.
+    Argumentos:
+        titulo (str): El texto que aparecerá como encabezado.
+        frases (list): Una lista de strings con las letras que va a mostrar.
+    """
     estado = {"corriendo": True}
 
     def cerrar_todo():
@@ -20,7 +26,7 @@ def vent_mostrar(titulo, frases):
         
         ventana.protocol("WM_DELETE_WINDOW", cerrar_todo)
         
-        ancho_v, alto_v = 350, 150 #Por si desean cambiar el tamano de la ventana :,D
+        ancho_v, alto_v = 350, 150
         x = (ventana.winfo_screenwidth() // 2) - (ancho_v // 2)
         y = (ventana.winfo_screenheight() // 2) - (alto_v // 2)
         ventana.geometry(f"{ancho_v}x{alto_v}+{x}+{y}")
