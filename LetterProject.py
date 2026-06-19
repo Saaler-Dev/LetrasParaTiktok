@@ -1,20 +1,23 @@
 import tkinter as tk
 import sys
+import os
 
 def vent_mostrar(titulo, frases):
-    """
-    Crea una secuencia de ventanas emergentes centradas.
-    Argumentos:
-        titulo (str): El texto que aparecerá como encabezado.
-        frases (list): Una lista de strings con las letras que va a mostrar.
-    """
     estado = {"corriendo": True}
 
     def cerrar_todo():
-        
         estado["corriendo"] = False
         root.destroy()
         sys.exit() 
+
+    ruta_imagen = "imagen2.png"
+    imagen_cargada = None
+    if os.path.exists(ruta_imagen):
+        try:
+            imagen_original = tk.PhotoImage(file=ruta_imagen)
+            imagen_cargada = imagen_original.subsample(10, 10)
+        except Exception as e:
+            print(f"Error cargando imagen: {e}")
 
     for frase in frases:
         if not estado["corriendo"]:
@@ -26,16 +29,29 @@ def vent_mostrar(titulo, frases):
         
         ventana.protocol("WM_DELETE_WINDOW", cerrar_todo)
         
-        ancho_v, alto_v = 350, 150
+        ancho_v, alto_v = 380, 160 
         x = (ventana.winfo_screenwidth() // 2) - (ancho_v // 2)
-        y = (ventana.winfo_screenheight() // 2) - (alto_v // 2)
+        y = (ventana.winfo_screenheight() // 3) - (alto_v // 3)
         ventana.geometry(f"{ancho_v}x{alto_v}+{x}+{y}")
         
-        label = tk.Label(ventana, text=frase, font=("Arial", 11), pady=30)
-        label.pack()
+        frame_principal = tk.Frame(ventana)
+        frame_principal.pack(fill="both", expand=True, pady=10)
 
-        boton = tk.Button(ventana, text="Aceptar",width=10,command=ventana.destroy)
-        boton.pack()
+        if imagen_cargada:
+            label_imagen = tk.Label(frame_principal, image=imagen_cargada)
+            label_imagen.pack(side="left", padx=(10, 15))
+
+        frame_derecho = tk.Frame(frame_principal)
+        frame_derecho.pack(side="left", expand=True, fill="both")
+
+        label_texto = tk.Label(frame_derecho, text=frase, font=("Arial", 12), wraplength=200)
+        label_texto.pack(expand=True, pady=(15, 5))
+
+        boton = tk.Button(frame_derecho, text="Aceptar", width=10, command=ventana.destroy)
+        boton.pack(pady=(0, 15))
+
+        ventana.lift()
+        ventana.focus_force()
 
         ventana.grab_set()
         try:
@@ -46,26 +62,15 @@ def vent_mostrar(titulo, frases):
 root = tk.Tk()
 root.withdraw()
 
-Letra = [
-    "Are you sick of me..? ( ._.)",
-    "Would you like to be?",
-    "I'm tryin' to tell you somethin'",
-    "Somethin' that I already said",
-    "You like a pretty boy ._.",
-    "with a pretty voice...",
-    "Who is tryin' to sell you somethin'",
-    "Somethin' that you already have",
-    "But if you're too drunk to drive",
-    "and the music is right",
-    "She might let you stay",
-    "but just for the night",
-    "And if she grabs for your hand ( o_o)",
-    "and drags you along",
-    "She might want a kiss",
-    "before the end of the song...",
-    "Because love can burn like a cigarette...",
-    "And leave you with nothing :c",
-    "And leave you with nothing...",
+Letra2 = [
+    "Is it true?",
+    "You've been feelin' sort of low these days",
+    "Just don't have a place to go these days",
+    "Must be bringin' you down",
+    "If it's so",
+    "Then come on, give this loverboy a try",
+    "I'll put the sparkle right back in your eyes",
+    "What could you lose?"
 ]
 
-vent_mostrar("Lovers Rock", Letra)
+vent_mostrar("Blue Hair - TV Girl", Letra2)
